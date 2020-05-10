@@ -278,29 +278,22 @@ void LexicalAnalyzer::run(const string &path)
 	while (content.size() > 0)
 	{
 		bool flag = false;
-		index = 0;
-		buffer.clear();
+		index = content.size() - 1;
+		buffer = content;
 
 		// 寻找可以被接受的字符串
-		for (; analyze(buffer) == 0 && index < content.size(); index++)
-			buffer.push_back(content[index]);
+		for (; analyze(buffer) == 0 && index > 0; index--)
+			buffer.pop_back();
 
-		if (index == content.size())
+		if (index == 0 && analyze(buffer) == 0)
 		{
 			content.erase(0, 1);  // 如果没找到可以被接受的字符串，删除首个字符重新开始识别
 			continue;
 		}
 		else
-			flag = true;  // 如果找到了，设置flag为true
-
-		for (; analyze(buffer) != 0 && flag && index < content.size(); index++)
-			buffer.push_back(content[index]);
-
-		if (flag)
 		{
-			buffer.pop_back();  // 如果找到了，弹出最后一个字符让之前的所有字符作为一个token
 			results.push_back(token(analyze(buffer), buffer));
-			content.erase(0, index - 1);
+			content.erase(0, index + 1);
 		}
 	}
 }
