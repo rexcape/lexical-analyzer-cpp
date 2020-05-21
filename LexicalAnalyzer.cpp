@@ -223,7 +223,7 @@ bool LexicalAnalyzer::isIntenger(const string &str)
 
 bool LexicalAnalyzer::isConstant(const string &str)
 {
-	return isUnsigned(str);
+	return isUnsigned(str) || isIntenger(str);
 }
 
 bool LexicalAnalyzer::isDelimiter(const string &str)
